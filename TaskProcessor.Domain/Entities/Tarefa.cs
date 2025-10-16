@@ -1,4 +1,5 @@
-﻿using TaskProcessor.Domain.Enums;
+﻿using TaskProcessor.Domain.DTOs;
+using TaskProcessor.Domain.Enums;
 
 namespace TaskProcessor.Domain.Entities
 {
@@ -23,12 +24,6 @@ namespace TaskProcessor.Domain.Entities
 
         public Tarefa(string tipoTarefa, string dadosTarefa, int maximoTentativas = 3)
         {
-            if (string.IsNullOrWhiteSpace(tipoTarefa))
-                throw new ArgumentException("O tipo da tarefa não pode ser vazio.", nameof(tipoTarefa));
-
-            if (string.IsNullOrWhiteSpace(dadosTarefa))
-                throw new ArgumentException("Os dados da tarefa não podem ser vazios.", nameof(dadosTarefa));
-
             Id = Guid.NewGuid();
             TipoTarefa = tipoTarefa;
             DadosTarefa = dadosTarefa;
@@ -39,10 +34,10 @@ namespace TaskProcessor.Domain.Entities
             DtAtualizacao = DateTime.UtcNow;
         }
 
+
         #endregion Public Constructor
 
         #region Public Methods
-
 
         public void MarcarComoEmProcessamento()
         {
@@ -95,7 +90,39 @@ namespace TaskProcessor.Domain.Entities
             return Status == StatusTarefaEnum.Falhou;
         }
 
+
+        public static Tarefa Criar(CriarTarefaRequest request)
+        {
+            ValidarCriacaoTarefa(request);
+
+            return new Tarefa(
+                request.TipoTarefa,
+                request.DadosTarefa,
+                request.MaximoTentativas
+            );
+        }
+
+
         #endregion Public Methods
+
+        #region Private Methods
+
+        private static void ValidarCriacaoTarefa(CriarTarefaRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.TipoTarefa))
+                throw new ArgumentException("Tipo da tarefa é obrigatório");
+
+            if (string.IsNullOrWhiteSpace(request.DadosTarefa))
+                throw new ArgumentException("Dados da tarefa são obrigatórios");
+
+            if (request.MaximoTentativas <= 0)
+                throw new ArgumentException("Máximo de tentativas deve ser maior que zero");
+
+            if (request.MaximoTentativas > 10)
+                throw new ArgumentException("Máximo de tentativas não pode ser maior que 10");
+        }
+
+        #endregion Private Methods
     }
 
 }

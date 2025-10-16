@@ -1,7 +1,11 @@
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskProcessor.Application.AppServices;
+using TaskProcessor.Application.Validators;
 using TaskProcessor.Domain.Entities;
 using TaskProcessor.Domain.Interfaces;
+using TaskProcessor.Domain.Services;
 using TaskProcessor.Infrastructure.Data.MongoDB;
 using TaskProcessor.Infrastructure.Data.MongoDB.Repositories;
 using TaskProcessor.Infrastructure.Messaging.RabbitMQ;
@@ -17,6 +21,7 @@ namespace TaskProcessor.Infrastructure
             services.AddSettings(configuration);
             services.AddMongoDB();
             services.AddRabbitMQ();
+            services.AddApplication();
             return services;
         }
 
@@ -57,6 +62,17 @@ namespace TaskProcessor.Infrastructure
             services.AddSingleton<RabbitMQConnection>();
             services.AddScoped<IMessagePublisher, RabbitMQPublisher>();
             services.AddScoped<IMessageConsumer, RabbitMQConsumer>();
+            return services;
+        }
+
+        private static IServiceCollection AddApplication(this IServiceCollection services)
+        {
+            services.AddScoped<ITarefaService, TarefaService>();
+
+            services.AddScoped<TarefaAppService>();
+
+            services.AddValidatorsFromAssemblyContaining<CriarTarefaValidator>();
+
             return services;
         }
     }

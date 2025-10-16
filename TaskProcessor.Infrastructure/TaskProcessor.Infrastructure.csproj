@@ -11,10 +11,13 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.8.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TaskProcessor.Domain\TaskProcessor.Domain.csproj" />
+    <ProjectReference Include="..\TaskProcessor.Application\TaskProcessor.Application.csproj" />
   </ItemGroup>
 
 </Project>
