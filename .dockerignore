@@ -1,0 +1,29 @@
+# Build results
+**/bin
+**/obj
+**/out
+
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Git
+.git/
+.gitignore
+
+# Docker files
+**/Dockerfile*
+**/docker-compose*
+
+# Node (caso use frontend depois)
+**/node_modules
+
+# Environment
+.env
+**/.env.*
+
+# Logs
+**/logs
+**/*.log
