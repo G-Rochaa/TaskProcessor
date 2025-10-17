@@ -5,7 +5,7 @@ using TaskProcessor.Domain.Interfaces;
 
 namespace TaskProcessor.Infrastructure.Data.MongoDB.Repositories
 {
-    public class TarefaRepository : Repository<Tarefa>, ITarefaRepository
+    public class TarefaRepository : BaseRepository<Tarefa>, ITarefaRepository
     {
         public TarefaRepository(IMongoCollection<Tarefa> collection) : base(collection)
         {

@@ -2,7 +2,7 @@ using TaskProcessor.Domain.Entities;
 
 namespace TaskProcessor.Domain.Interfaces
 {
-    public interface ITarefaRepository : IRepository<Tarefa>
+    public interface ITarefaRepository : IBaseRepository<Tarefa>
     {
         Task<IEnumerable<Tarefa>> GetTarefasPendentesAsync();
         Task<IEnumerable<Tarefa>> GetTarefasPorStatusAsync(Enums.StatusTarefaEnum status);

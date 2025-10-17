@@ -4,11 +4,11 @@ using TaskProcessor.Domain.Interfaces;
 
 namespace TaskProcessor.Infrastructure.Data.MongoDB.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         protected readonly IMongoCollection<T> _collection;
 
-        public Repository(IMongoCollection<T> collection)
+        public BaseRepository(IMongoCollection<T> collection)
         {
             _collection = collection;
         }

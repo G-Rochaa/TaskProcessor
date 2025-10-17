@@ -1,9 +1,11 @@
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
 using TaskProcessor.Domain.Entities;
 using TaskProcessor.Domain.Enums;
 
-namespace TaskProcessor.Infrastructure.Data.MongoDB.Configurations
+namespace TaskProcessor.Infrastructure.Data.MongoDb.Configurations
 {
     public class TarefaConfiguration
     {
@@ -16,13 +18,13 @@ namespace TaskProcessor.Infrastructure.Data.MongoDB.Configurations
             {
                 cm.AutoMap();
                 cm.SetIgnoreExtraElements(true);
-                
+
                 cm.MapIdMember(c => c.Id)
                   .SetIdGenerator(CombGuidGenerator.Instance);
-                
+
                 cm.MapMember(c => c.Status)
-                  .SetSerializer(new MongoDB.Bson.Serialization.Serializers.EnumSerializer<StatusTarefaEnum>(Bson.BsonType.String));
-                
+                  .SetSerializer(new EnumSerializer<StatusTarefaEnum>(BsonType.String));
+
                 cm.SetIgnoreExtraElements(true);
             });
         }

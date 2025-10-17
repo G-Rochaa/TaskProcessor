@@ -1,4 +1,4 @@
-using TaskProcessor.Application.Mappings;
+using TaskProcessor.Domain.Mappings;
 using TaskProcessor.Domain.DTOs;
 using TaskProcessor.Domain.Interfaces;
 

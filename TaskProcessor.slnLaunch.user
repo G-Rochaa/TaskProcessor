@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "TaskProcessor.API\\TaskProcessor.API.csproj",
+        "Action": "Start",
+        "DebugTarget": "http"
+      },
+      {
+        "Path": "TaskProcessor.Worker\\TaskProcessor.Worker.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

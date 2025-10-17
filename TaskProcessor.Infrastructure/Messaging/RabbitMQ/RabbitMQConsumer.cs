@@ -65,7 +65,8 @@ namespace TaskProcessor.Infrastructure.Messaging.RabbitMQ
 
             _consumerTag = _channel.BasicConsume(
                 queue: nomeFila,
-                autoAck: false, 
+                autoAck: false,
+                consumer: consumer
             );
 
             await Task.CompletedTask;

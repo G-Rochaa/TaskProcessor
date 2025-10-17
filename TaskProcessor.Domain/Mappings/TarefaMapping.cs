@@ -1,7 +1,7 @@
 using TaskProcessor.Domain.DTOs;
 using TaskProcessor.Domain.Entities;
 
-namespace TaskProcessor.Application.Mappings
+namespace TaskProcessor.Domain.Mappings
 {
     public static class TarefaMapping
     {

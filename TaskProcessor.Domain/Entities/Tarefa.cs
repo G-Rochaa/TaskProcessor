@@ -93,8 +93,6 @@ namespace TaskProcessor.Domain.Entities
 
         public static Tarefa Criar(CriarTarefaRequest request)
         {
-            ValidarCriacaoTarefa(request);
-
             return new Tarefa(
                 request.TipoTarefa,
                 request.DadosTarefa,
@@ -104,25 +102,6 @@ namespace TaskProcessor.Domain.Entities
 
 
         #endregion Public Methods
-
-        #region Private Methods
-
-        private static void ValidarCriacaoTarefa(CriarTarefaRequest request)
-        {
-            if (string.IsNullOrWhiteSpace(request.TipoTarefa))
-                throw new ArgumentException("Tipo da tarefa é obrigatório");
-
-            if (string.IsNullOrWhiteSpace(request.DadosTarefa))
-                throw new ArgumentException("Dados da tarefa são obrigatórios");
-
-            if (request.MaximoTentativas <= 0)
-                throw new ArgumentException("Máximo de tentativas deve ser maior que zero");
-
-            if (request.MaximoTentativas > 10)
-                throw new ArgumentException("Máximo de tentativas não pode ser maior que 10");
-        }
-
-        #endregion Private Methods
     }
 
 }

@@ -1,6 +1,7 @@
 using TaskProcessor.Domain.DTOs;
 using TaskProcessor.Domain.Entities;
 using TaskProcessor.Domain.Interfaces;
+using TaskProcessor.Domain.Mappings;
 
 namespace TaskProcessor.Domain.Services
 {

@@ -31,7 +31,7 @@ namespace TaskProcessor.API.Controllers
             try
             {
                 var tarefa = await _tarefaAppService.CriarTarefaAsync(request);
-                return CreatedAtAction(nameof(ObterTarefaAsync), new { id = tarefa.Id }, tarefa);
+                return CreatedAtRoute(routeName: "ObterTarefa", routeValues: new { id = tarefa.Id }, value: tarefa);
             }
             catch (ArgumentException ex)
             {
@@ -39,7 +39,7 @@ namespace TaskProcessor.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "ObterTarefa")]
         [ProducesResponseType(typeof(TarefaResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TarefaResponse>> ObterTarefaAsync(Guid id)

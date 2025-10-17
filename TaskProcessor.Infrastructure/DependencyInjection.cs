@@ -42,10 +42,10 @@ namespace TaskProcessor.Infrastructure
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Tarefa>>(provider =>
+            services.AddScoped<IBaseRepository<Tarefa>>(provider =>
             {
                 var context = provider.GetRequiredService<MongoDbContext>();
-                return new Repository<Tarefa>(context.Tarefas);
+                return new BaseRepository<Tarefa>(context.Tarefas);
             });
 
             services.AddScoped<ITarefaRepository>(provider =>
