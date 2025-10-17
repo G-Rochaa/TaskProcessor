@@ -1,39 +1,6 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: TaskProcessor.API/dockerfile
-    container_name: taskprocessor-api
-    ports:
-      - "5034:5034"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=http://+:5034
-      - MongoDb__ConnectionString=mongodb://taskprocessor-mongodb:27017
-      - RabbitMQ__HostName=taskprocessor-rabbitmq
-    depends_on:
-      - mongodb
-      - rabbitmq
-    networks:
-      - taskprocessor-network
-
-  worker:
-    build:
-      context: .
-      dockerfile: TaskProcessor.Worker/dockerfile
-    container_name: taskprocessor-worker
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - MongoDb__ConnectionString=mongodb://taskprocessor-mongodb:27017
-      - RabbitMQ__HostName=taskprocessor-rabbitmq
-    depends_on:
-      - mongodb
-      - rabbitmq
-    networks:
-      - taskprocessor-network
-
   mongodb:
     image: mongo:7.0
     container_name: taskprocessor-mongodb

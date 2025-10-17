@@ -7,9 +7,9 @@ using TaskProcessor.Domain.Entities;
 using TaskProcessor.Domain.Interfaces;
 using TaskProcessor.Domain.Services;
 using TaskProcessor.Infrastructure.Data.MongoDB;
-using TaskProcessor.Infrastructure.Data.MongoDB.Repositories;
-using TaskProcessor.Infrastructure.Messaging.RabbitMQ;
 using TaskProcessor.Infrastructure.Settings;
+using TaskProcessor.Infrastructure.Messaging.RabbitMQ;
+using TaskProcessor.Infrastructure.Data.MongoDB.Repositories;
 
 namespace TaskProcessor.Infrastructure
 {

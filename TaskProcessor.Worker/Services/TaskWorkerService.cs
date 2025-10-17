@@ -24,10 +24,15 @@ namespace TaskProcessor.Worker.Services
                 using var scope = _serviceProvider.CreateScope();
                 var messageConsumer = scope.ServiceProvider.GetRequiredService<IMessageConsumer>();
 
+                _logger.LogInformation("Iniciando consumo de mensagens da fila 'tarefas-para-processar'");
+
                 await messageConsumer.IniciarConsumoAsync<ProcessarTarefaMessage>(
                     "tarefas-para-processar",
                     async mensagem =>
                     {
+                        _logger.LogInformation("Nova mensagem recebida: TarefaId={TarefaId}, Tipo={TipoTarefa}", 
+                            mensagem.TarefaId, mensagem.TipoTarefa);
+                            
                         using var messageScope = _serviceProvider.CreateScope();
 
                         var tarefaRepository = messageScope.ServiceProvider.GetRequiredService<ITarefaRepository>();
@@ -35,6 +40,8 @@ namespace TaskProcessor.Worker.Services
 
                         await ProcessarTarefaAsync(mensagem, tarefaRepository, processorFactory);
                     });
+
+                _logger.LogInformation("Consumo de mensagens iniciado com sucesso");
             }
             catch (Exception ex)
             {
@@ -42,9 +49,11 @@ namespace TaskProcessor.Worker.Services
                 throw;
             }
 
+            _logger.LogInformation("Worker aguardando mensagens");
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(5000, stoppingToken);
             }
 
             _logger.LogInformation("TaskWorkerService finalizado");

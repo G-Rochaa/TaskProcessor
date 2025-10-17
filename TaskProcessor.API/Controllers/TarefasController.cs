@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskProcessor.Application.AppServices;
 using TaskProcessor.Domain.DTOs;
+using FluentValidation;
 
 namespace TaskProcessor.API.Controllers
 {
@@ -10,13 +11,15 @@ namespace TaskProcessor.API.Controllers
     {
         #region Private Fields
         private readonly TarefaAppService _tarefaAppService;
+        private readonly IValidator<CriarTarefaRequest> _validator;
 
         #endregion Private Fields
 
         #region Public Constructor
-        public TarefasController(TarefaAppService tarefaAppService)
+        public TarefasController(TarefaAppService tarefaAppService, IValidator<CriarTarefaRequest> validator)
         {
             _tarefaAppService = tarefaAppService;
+            _validator = validator;
         }
 
         #endregion Public Constructor
@@ -28,6 +31,13 @@ namespace TaskProcessor.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TarefaResponse>> CriarTarefaAsync([FromBody] CriarTarefaRequest request)
         {
+            var validationResult = await _validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                return BadRequest(new { message = "Dados inválidos", errors = errors });
+            }
+
             try
             {
                 var tarefa = await _tarefaAppService.CriarTarefaAsync(request);
