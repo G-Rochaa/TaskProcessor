@@ -6,14 +6,24 @@ namespace TaskProcessor.Application.AppServices
 {
     public class TarefaAppService
     {
+        #region Public Fields
+
         private readonly ITarefaService _tarefaService;
         private readonly IMessagePublisher _messagePublisher;
+
+        #endregion Public Fields
+
+        #region Public Constructor
 
         public TarefaAppService(ITarefaService tarefaService, IMessagePublisher messagePublisher)
         {
             _tarefaService = tarefaService;
             _messagePublisher = messagePublisher;
         }
+
+        #endregion Public Constructor
+
+        #region Public Methods
 
         public async Task<TarefaResponse> CriarTarefaAsync(CriarTarefaRequest request)
         {
@@ -40,5 +50,7 @@ namespace TaskProcessor.Application.AppServices
         {
             return await _tarefaService.ListarTarefasPendentesAsync();
         }
+
+        #endregion Public Methods
     }
 }

@@ -7,12 +7,22 @@ namespace TaskProcessor.Domain.Services
 {
     public class TarefaService : ITarefaService
     {
+        #region Private Fields
+
         private readonly ITarefaRepository _tarefaRepository;
+
+        #endregion Private Fields
+
+        #region Public Constructor
 
         public TarefaService(ITarefaRepository tarefaRepository)
         {
             _tarefaRepository = tarefaRepository;
         }
+
+        #endregion Public Constructor
+
+        #region Public Methods
 
         public async Task<TarefaResponse> CriarTarefaAsync(CriarTarefaRequest request)
         {
@@ -43,5 +53,6 @@ namespace TaskProcessor.Domain.Services
             return tarefas.Select(TarefaMapping.ToResponse);
         }
 
+        #endregion Public Methods
     }
 }

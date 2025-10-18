@@ -16,6 +16,8 @@ namespace TaskProcessor.Infrastructure
     public static class DependencyInjection
     {
 
+        #region Public Methods
+
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSettings(configuration);
@@ -24,6 +26,10 @@ namespace TaskProcessor.Infrastructure
             services.AddApplication();
             return services;
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static IServiceCollection AddSettings(this IServiceCollection services, IConfiguration configuration)
         {
@@ -75,5 +81,7 @@ namespace TaskProcessor.Infrastructure
 
             return services;
         }
+
+        #endregion Private Methods
     }
 }

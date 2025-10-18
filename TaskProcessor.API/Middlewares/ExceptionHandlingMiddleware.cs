@@ -5,14 +5,24 @@ namespace TaskProcessor.API.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
+        #region Private Fields
+
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+        #endregion Private Fields
+
+        #region Public Constructor
 
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
         }
+
+        #endregion Public Constructor
+
+        #region Public Methods
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -27,6 +37,9 @@ namespace TaskProcessor.API.Middlewares
             }
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
@@ -72,5 +85,8 @@ namespace TaskProcessor.API.Middlewares
 
             await context.Response.WriteAsync(jsonResponse);
         }
+
+        #endregion Private Methods
+
     }
 }
