@@ -6,8 +6,14 @@ namespace TaskProcessor.Worker.Services
 {
     public class TaskWorkerService : BackgroundService
     {
+        #region Private Fields
+
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<TaskWorkerService> _logger;
+
+        #endregion Private Fields
+
+        #region Public Constructor
 
         public TaskWorkerService(IServiceProvider serviceProvider, ILogger<TaskWorkerService> logger)
         {
@@ -15,14 +21,20 @@ namespace TaskProcessor.Worker.Services
             _logger = logger;
         }
 
+        #endregion Public Constructor
+
+        #region Protected Methods
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("TaskWorkerService iniciado");
 
+            IMessageConsumer? messageConsumer = null;
+
             try
             {
                 using var scope = _serviceProvider.CreateScope();
-                var messageConsumer = scope.ServiceProvider.GetRequiredService<IMessageConsumer>();
+                messageConsumer = scope.ServiceProvider.GetRequiredService<IMessageConsumer>();
 
                 _logger.LogInformation("Iniciando consumo de mensagens da fila 'tarefas-para-processar'");
 
@@ -42,27 +54,45 @@ namespace TaskProcessor.Worker.Services
                     });
 
                 _logger.LogInformation("Consumo de mensagens iniciado com sucesso");
+
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    await Task.Delay(5000, stoppingToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("TaskWorkerService cancelado");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao iniciar consumo de mensagens");
                 throw;
             }
-
-            _logger.LogInformation("Worker aguardando mensagens");
-
-            while (!stoppingToken.IsCancellationRequested)
+            finally
             {
-                await Task.Delay(5000, stoppingToken);
+                try
+                {
+                    if (messageConsumer != null)
+                    {
+                        await messageConsumer.PararConsumoAsync();
+                        _logger.LogInformation("Consumo de mensagens parado");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Erro ao parar consumo de mensagens");
+                }
             }
 
             _logger.LogInformation("TaskWorkerService finalizado");
         }
 
-        private async Task ProcessarTarefaAsync(
-            ProcessarTarefaMessage mensagem,
-            ITarefaRepository tarefaRepository,
-            ProcessadorTarefasFactory processorFactory)
+        #endregion Protected Methods
+
+        #region Private Methods
+
+        private async Task ProcessarTarefaAsync(ProcessarTarefaMessage mensagem, ITarefaRepository tarefaRepository, ProcessadorTarefasFactory processorFactory)
         {
             _logger.LogInformation("Processando tarefa {TarefaId} do tipo {TipoTarefa}",
                 mensagem.TarefaId, mensagem.TipoTarefa);
@@ -124,5 +154,7 @@ namespace TaskProcessor.Worker.Services
                 }
             }
         }
+
+        #endregion Private Methods
     }
 }

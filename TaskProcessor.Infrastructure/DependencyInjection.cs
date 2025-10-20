@@ -38,6 +38,7 @@ namespace TaskProcessor.Infrastructure
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
             services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQ"));
             services.Configure<TarefaSettings>(configuration.GetSection("TarefaSettings"));
+            services.Configure<TarefaRetrySettings>(configuration.GetSection("TarefaRetrySettings"));
             return services;
         }
 
@@ -81,6 +82,10 @@ namespace TaskProcessor.Infrastructure
             services.AddScoped<ITarefaAppService, TarefaAppService>();
 
             services.AddScoped<ITarefaConfigService, TarefaConfigService>();
+
+            services.AddScoped<ITarefaRetryService, TarefaRetryService>();
+
+            services.AddScoped<ITarefaRetryAppService, TarefaRetryAppService>();
 
             services.AddValidatorsFromAssemblyContaining<CriarTarefaValidator>();
 

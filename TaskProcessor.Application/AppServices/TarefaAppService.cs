@@ -7,12 +7,12 @@ namespace TaskProcessor.Application.AppServices
 {
     public class TarefaAppService : ITarefaAppService
     {
-        #region Public Fields
+        #region Private Fields
 
         private readonly ITarefaService _tarefaService;
         private readonly IMessagePublisher _messagePublisher;
 
-        #endregion Public Fields
+        #endregion Private Fields
 
         #region Public Constructor
 

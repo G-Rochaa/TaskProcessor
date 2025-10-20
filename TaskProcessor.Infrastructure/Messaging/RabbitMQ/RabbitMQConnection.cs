@@ -7,8 +7,8 @@ namespace TaskProcessor.Infrastructure.Messaging.RabbitMQ
     public class RabbitMQConnection : IDisposable
     {
         private readonly RabbitMQSettings _settings;
+        private readonly object _lock = new object();
         private IConnection? _connection;
-        private IModel? _channel;
         private bool _disposed = false;
 
         public RabbitMQConnection(IOptions<RabbitMQSettings> settings)
@@ -18,42 +18,53 @@ namespace TaskProcessor.Infrastructure.Messaging.RabbitMQ
 
         public IModel GetChannel()
         {
-            if (_channel == null || _channel.IsClosed)
-            {
-                _channel = GetConnection().CreateModel();
-            }
-            return _channel;
-        }
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(RabbitMQConnection));
 
-        private IConnection GetConnection()
-        {
-            if (_connection == null || !_connection.IsOpen)
+            lock (_lock)
             {
-                var factory = new ConnectionFactory
+                if (_connection == null || !_connection.IsOpen)
                 {
-                    HostName = _settings.HostName,
-                    Port = _settings.Port,
-                    UserName = _settings.UserName,
-                    Password = _settings.Password,
-                    VirtualHost = _settings.VirtualHost,
-                    AutomaticRecoveryEnabled = true,
-                    NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
-                };
+                    var factory = new ConnectionFactory
+                    {
+                        HostName = _settings.HostName,
+                        Port = _settings.Port,
+                        UserName = _settings.UserName,
+                        Password = _settings.Password,
+                        VirtualHost = _settings.VirtualHost,
+                        AutomaticRecoveryEnabled = true,
+                        NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
+                        RequestedHeartbeat = TimeSpan.FromSeconds(60),
+                        RequestedConnectionTimeout = TimeSpan.FromSeconds(30)
+                    };
 
-                _connection = factory.CreateConnection();
+                    _connection = factory.CreateConnection();
+                }
+
+                return _connection.CreateModel();
             }
-            return _connection;
         }
 
         public void Dispose()
         {
             if (!_disposed)
             {
-                _channel?.Close();
-                _channel?.Dispose();
-                _connection?.Close();
-                _connection?.Dispose();
-                _disposed = true;
+                lock (_lock)
+                {
+                    try
+                    {
+                        _connection?.Close();
+                        _connection?.Dispose();
+                    }
+                    catch
+                    {
+                        // ignorar erros por enquanto que não sei o que fazer
+                    }
+                    finally
+                    {
+                        _disposed = true;
+                    }
+                }
             }
         }
     }

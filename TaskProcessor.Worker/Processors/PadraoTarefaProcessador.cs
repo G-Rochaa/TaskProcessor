@@ -19,22 +19,16 @@ namespace TaskProcessor.Worker.Processors
 
         public async Task ProcessarAsync(ProcessarTarefaMessage mensagem)
         {
-            _logger.LogInformation("Processando tarefa genérica {TipoTarefa} para tarefa {TarefaId}", 
+            _logger.LogInformation("Processando tarefa genérica {TipoTarefa} para tarefa {TarefaId}",
                 mensagem.TipoTarefa, mensagem.TarefaId);
 
-            try
-            {
-                _logger.LogInformation("Executando processamento genérico para tipo '{TipoTarefa}'", mensagem.TipoTarefa);
+            // TESTE DE FALHA - Descomente a linha abaixo para simular erro
+            throw new Exception($"Erro simulado para testar retry");
 
-                await Task.Delay(3000);
+            await Task.Delay(1000);
 
-                _logger.LogInformation("Processamento genérico concluído para tarefa {TarefaId}", mensagem.TarefaId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro no processamento genérico para tarefa {TarefaId}", mensagem.TarefaId);
-                throw;
-            }
+            _logger.LogInformation("Tarefa genérica {TipoTarefa} processada com sucesso para tarefa {TarefaId}",
+                mensagem.TipoTarefa, mensagem.TarefaId);
         }
     }
 }
