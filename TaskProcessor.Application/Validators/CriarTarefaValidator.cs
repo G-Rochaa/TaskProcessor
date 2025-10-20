@@ -20,12 +20,6 @@ namespace TaskProcessor.Application.Validators
                 .WithMessage("Dados da tarefa são obrigatórios")
                 .Must(BeValidJson)
                 .WithMessage("Dados da tarefa devem ser um JSON válido");
-
-            RuleFor(x => x.MaximoTentativas)
-                .GreaterThan(0)
-                .WithMessage("Máximo de tentativas deve ser maior que zero")
-                .LessThanOrEqualTo(10)
-                .WithMessage("Máximo de tentativas não pode ser maior que 10");
         }
 
         private bool BeValidJson(string json)

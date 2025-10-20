@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TaskProcessor.Application.AppServices;
+using TaskProcessor.Application.Interfaces;
 using TaskProcessor.Domain.DTOs;
 using FluentValidation;
 
@@ -10,13 +10,14 @@ namespace TaskProcessor.API.Controllers
     public class TarefasController : ControllerBase
     {
         #region Private Fields
-        private readonly TarefaAppService _tarefaAppService;
+
+        private readonly ITarefaAppService _tarefaAppService;
         private readonly IValidator<CriarTarefaRequest> _validator;
 
         #endregion Private Fields
 
         #region Public Constructor
-        public TarefasController(TarefaAppService tarefaAppService, IValidator<CriarTarefaRequest> validator)
+        public TarefasController(ITarefaAppService tarefaAppService, IValidator<CriarTarefaRequest> validator)
         {
             _tarefaAppService = tarefaAppService;
             _validator = validator;
@@ -82,3 +83,4 @@ namespace TaskProcessor.API.Controllers
         #endregion Public Methods
     }
 }
+ 

@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskProcessor.Application.AppServices;
+using TaskProcessor.Application.Interfaces;
 using TaskProcessor.Application.Validators;
 using TaskProcessor.Domain.Entities;
 using TaskProcessor.Domain.Interfaces;
@@ -9,6 +10,7 @@ using TaskProcessor.Domain.Services;
 using TaskProcessor.Infrastructure.Data.MongoDB;
 using TaskProcessor.Infrastructure.Settings;
 using TaskProcessor.Infrastructure.Messaging.RabbitMQ;
+using TaskProcessor.Infrastructure.Services;
 using TaskProcessor.Infrastructure.Data.MongoDB.Repositories;
 
 namespace TaskProcessor.Infrastructure
@@ -35,6 +37,7 @@ namespace TaskProcessor.Infrastructure
         {
             services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
             services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQ"));
+            services.Configure<TarefaSettings>(configuration.GetSection("TarefaSettings"));
             return services;
         }
 
@@ -75,7 +78,9 @@ namespace TaskProcessor.Infrastructure
         {
             services.AddScoped<ITarefaService, TarefaService>();
 
-            services.AddScoped<TarefaAppService>();
+            services.AddScoped<ITarefaAppService, TarefaAppService>();
+
+            services.AddScoped<ITarefaConfigService, TarefaConfigService>();
 
             services.AddValidatorsFromAssemblyContaining<CriarTarefaValidator>();
 

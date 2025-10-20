@@ -22,7 +22,7 @@ namespace TaskProcessor.Domain.Entities
 
         #region Public Constructor
 
-        public Tarefa(string tipoTarefa, string dadosTarefa, int maximoTentativas = 3)
+        public Tarefa(string tipoTarefa, string dadosTarefa, int maximoTentativas)
         {
             Id = Guid.NewGuid();
             TipoTarefa = tipoTarefa;
@@ -91,12 +91,12 @@ namespace TaskProcessor.Domain.Entities
         }
 
 
-        public static Tarefa Criar(CriarTarefaRequest request)
+        public static Tarefa Criar(CriarTarefaRequest request, int maximoTentativas)
         {
             return new Tarefa(
                 request.TipoTarefa,
                 request.DadosTarefa,
-                request.MaximoTentativas
+                maximoTentativas
             );
         }
 

@@ -10,14 +10,16 @@ namespace TaskProcessor.Domain.Services
         #region Private Fields
 
         private readonly ITarefaRepository _tarefaRepository;
+        private readonly ITarefaConfigService _tarefaConfigService;
 
         #endregion Private Fields
 
         #region Public Constructor
 
-        public TarefaService(ITarefaRepository tarefaRepository)
+        public TarefaService(ITarefaRepository tarefaRepository, ITarefaConfigService tarefaConfigService)
         {
             _tarefaRepository = tarefaRepository;
+            _tarefaConfigService = tarefaConfigService;
         }
 
         #endregion Public Constructor
@@ -26,7 +28,8 @@ namespace TaskProcessor.Domain.Services
 
         public async Task<TarefaResponse> CriarTarefaAsync(CriarTarefaRequest request)
         {
-            var tarefa = Tarefa.Criar(request);
+            var maximoTentativas = _tarefaConfigService.ObterMaximoTentativas(request.TipoTarefa);
+            var tarefa = Tarefa.Criar(request, maximoTentativas);
             await _tarefaRepository.AddAsync(tarefa);
             return TarefaMapping.ToResponse(tarefa);
         }

@@ -1,10 +1,11 @@
 using TaskProcessor.Domain.Mappings;
 using TaskProcessor.Domain.DTOs;
 using TaskProcessor.Domain.Interfaces;
+using TaskProcessor.Application.Interfaces;
 
 namespace TaskProcessor.Application.AppServices
 {
-    public class TarefaAppService
+    public class TarefaAppService : ITarefaAppService
     {
         #region Public Fields
 
