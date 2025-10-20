@@ -82,8 +82,7 @@ Content-Type: application/json
 
 {
   "tipoTarefa": "Email",
-  "dadosTarefa": "{\"email\":\"usuario@exemplo.com\",\"assunto\":\"Teste\"}",
-  "maximoTentativas": 3
+  "dadosTarefa": "{\"email\":\"usuario@exemplo.com\",\"assunto\":\"Teste\"}"
 }
 ```
 
